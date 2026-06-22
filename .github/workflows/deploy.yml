@@ -10,17 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Pull the latest code from your GitHub repository onto the runner dddd
+    # Step 1: Updated to latest checkout action
     - name: Checkout Repository Code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.2.2 
 
-    # Step 2: Set up the correct Node.js runtime environment
+    # Step 2: Set up the correct Node.js runtime environment for your project files
     - name: Set up Node.js Runtime
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v4.2.0
       with:
-        node-version: '20.x'
+        node-version: '20.x' # Keep this as 20.x to match your AWS Lambda runtime
 
-    # Step 3: Install production node modules
+    # Step 3: Install only production dependencies
     - name: Install Production Node Modules
       run: npm install --production
 
@@ -28,9 +28,9 @@ jobs:
     - name: Package Application Files
       run: zip -r function.zip index.js package.json node_modules
 
-    # Step 5: Log in to AWS using the secure repository secrets
+    # Step 5: Updated to latest AWS credentials action
     - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v4
+      uses: aws-actions/configure-aws-credentials@v4.1.0
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
