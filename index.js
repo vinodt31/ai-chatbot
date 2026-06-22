@@ -9,8 +9,9 @@ import { ChatPromptTemplate } from "@langchain/core/prompts";
 
 
 export const handler = async (event) => {
-  console.log("event : ", event.body);
-  const userInput = JSON.parse(event.body).question;
+  console.log("event : ", event);
+  const body = typeof event.body === 'string' ? JSON.parse(event.body) : (event.body || event);
+  const userInput = body?.question;
   
   try {
     
@@ -89,7 +90,8 @@ export const handler = async (event) => {
      // TODO implement
     return {
       statusCode: 200,
-      body: {answer},
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ answer }), // Object को string में बदलें
     };
 
   } catch (error) {
