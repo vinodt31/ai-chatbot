@@ -82,8 +82,6 @@ export const handler = async (event) => {
     // Print the answer
     console.log("\n🤖 Answer:");
     console.log(response.answer);
-
-    
     
     // वैकल्पिक: आप देख सकते हैं कि किस सोर्स डाक्यूमेंट्स से जवाब बना
     // console.log("\n📚 Sources used:", response.context.map(doc => doc.metadata));
