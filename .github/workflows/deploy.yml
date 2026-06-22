@@ -18,7 +18,7 @@ jobs:
     - name: Set up Node.js Runtime
       uses: actions/setup-node@v4.2.0
       with:
-        node-version: '20.x' # Keep this as 20.x to match your AWS Lambda runtime
+        node-version: '24.x' # Keep this as 20.x to match your AWS Lambda runtime
 
     # Step 3: Install only production dependencies
     - name: Install Production Node Modules
