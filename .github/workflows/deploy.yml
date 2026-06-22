@@ -45,6 +45,6 @@ jobs:
     - name: Push Zip from S3 to AWS Lambda
       run: |
         aws lambda update-function-code \
-          --function-name chat-boat-lambda \
+          --function-name ai-chatbot \
           --s3-bucket vinod-chatbot-pipeline-bucket \
           --s3-key function.zip
