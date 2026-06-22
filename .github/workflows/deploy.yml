@@ -1,0 +1,50 @@
+name: Deploy Lambda Code Pipeline
+
+on:
+  push:
+    branches:
+      - main  
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Pull the latest code from your GitHub repository onto the runner dddd
+    - name: Checkout Repository Code
+      uses: actions/checkout@v4
+
+    # Step 2: Set up the correct Node.js runtime environment
+    - name: Set up Node.js Runtime
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+
+    # Step 3: Install production node modules
+    - name: Install Production Node Modules
+      run: npm install --production
+
+    # Step 4: Compress index.js, package.json, and node_modules into a single zip file
+    - name: Package Application Files
+      run: zip -r function.zip index.js package.json node_modules
+
+    # Step 5: Log in to AWS using the secure repository secrets
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    # Step 6: Upload the heavy zip file to S3 first (Bypasses 50MB direct limit)
+    - name: Upload to S3
+      run: |
+        aws s3 cp function.zip s3://vinod-chatbot-pipeline-bucket/function.zip
+
+    # Step 7: Update Lambda code pointing directly to the S3 object
+    - name: Push Zip from S3 to AWS Lambda
+      run: |
+        aws lambda update-function-code \
+          --function-name chat-boat-lambda \
+          --s3-bucket vinod-chatbot-pipeline-bucket \
+          --s3-key function.zip

@@ -92,8 +92,6 @@ export const handler = async (event) => {
       body: {answer},
     };
 
-    
-
   } catch (error) {
     console.error("Error during query:", error);
   }
